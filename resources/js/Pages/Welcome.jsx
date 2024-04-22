@@ -40,7 +40,6 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
     const handleSubmit = (event) => {
       event.preventDefault();
-      // Aqui você pode adicionar a lógica para lidar com o envio dos dados do formulário
       console.log('Dados do formulário enviados:', formData);
       handleCloseModal(); // Feche o modal após o envio do formulário
     };

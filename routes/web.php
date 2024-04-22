@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\CategoriaController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -13,10 +14,12 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-Route::get('/modal', function () {
-    return Inertia::render('Modal', [
+
+Route::get('/categoria', function () {
+    return Inertia::render('CategoriaCreate', [
     ]);
 });
+Route::post('/categoria', [CategoriaController::class, 'store']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
