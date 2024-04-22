@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
 import { useState } from 'react';
 import Modal from './Modal';
+import { router } from '@inertiajs/react' 
 
 function LocationMarker({ onMapClick }) {
     const [position, setPosition] = useState(null);
@@ -18,11 +19,12 @@ function LocationMarker({ onMapClick }) {
     });
 }
 
-export default function Welcome({ auth, laravelVersion, phpVersion }) {
+export default function Welcome({ auth, laravelVersion, phpVersion ,categorias}) {
     const [modalOpen, setModalOpen] = useState(false);
     const [formData, setFormData] = useState({
       nome: '',
-      endereco: ''
+      endereco: '',
+      categoria_id: ''
     });
 
     const handleOpenModal = () => {
@@ -34,15 +36,19 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
     };
 
     const handleChange = (event) => {
-      const { name, value } = event.target;
-      setFormData({ ...formData, [name]: value });
+      const { name, values } = event.target;
+      setFormData({ ...formData, [name]: values });
+      console.log(name)
     };
+    
 
     const handleSubmit = (event) => {
-      event.preventDefault();
-      console.log('Dados do formulário enviados:', formData);
-      handleCloseModal(); // Feche o modal após o envio do formulário
+        event.preventDefault();
+        router.post('/ponto', values)
+
+        
     };
+    
 
     return (
         <div className="flex justify-center items-center h-screen">
@@ -66,7 +72,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                 <LocationMarker onMapClick={handleOpenModal} />
             </MapContainer>
 
-            {/* Renderiza o modal */}
+            
             <Modal show={modalOpen} onClose={handleCloseModal} maxWidth="md"  style={{ zIndex: 999 }}>
                 <div className="p-4">
                     <h2>Adicionar Ponto de Interesse</h2>
@@ -82,6 +88,22 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                           className="border border-gray-300 rounded-md px-3 py-2 w-full"
                           required
                         />
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="categoria_id" className="block mb-2">Categoria:</label>
+                        <select
+                          id="categoria_id"
+                          name="categoria_id"
+                          value={formData.categoria_id}
+                          onChange={handleChange}
+                          className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                          required
+                        >
+                          <option value="">Selecione uma categoria</option>
+                          {categorias.map((categoria) => (
+                            <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
+                          ))}
+                        </select>
                       </div>
                       <div className="mb-4">
                         <label htmlFor="endereco" className="block mb-2">Endereço:</label>
