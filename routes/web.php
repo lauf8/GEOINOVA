@@ -13,6 +13,10 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+Route::get('/modal', function () {
+    return Inertia::render('Modal', [
+    ]);
+});
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
