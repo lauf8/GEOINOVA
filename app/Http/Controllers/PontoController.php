@@ -22,8 +22,8 @@ class PontoController extends Controller
     {
         $request->validate([
             'nome' => 'required|string|max:255',
-            'categoria_id' => 'required|url|max:255',
-            'endereco' => 'required|url|max:255',
+            'categoria_id' => 'required|max:255',
+            'endereco' => 'required|max:255',
         ]);
 
         $ponto = new Ponto();

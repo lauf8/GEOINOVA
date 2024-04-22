@@ -1,4 +1,4 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head, useForm } from '@inertiajs/react';
 import { MapContainer, TileLayer, useMap, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
@@ -21,11 +21,7 @@ function LocationMarker({ onMapClick }) {
 
 export default function Welcome({ auth, laravelVersion, phpVersion ,categorias}) {
     const [modalOpen, setModalOpen] = useState(false);
-    const [formData, setFormData] = useState({
-      nome: '',
-      endereco: '',
-      categoria_id: ''
-    });
+    
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -34,20 +30,35 @@ export default function Welcome({ auth, laravelVersion, phpVersion ,categorias})
     const handleCloseModal = () => {
         setModalOpen(false);
     };
-
+    const { data, setData, post } = useForm({
+        nome: '',
+        endereco: '',
+        categoria_id: ''
+    });
     const handleChange = (event) => {
-      const { name, values } = event.target;
-      setFormData({ ...formData, [name]: values });
-      console.log(name)
+        const { name, value } = event.target;
+        setData({ ...data, [name]: value });
     };
-    
-
     const handleSubmit = (event) => {
         event.preventDefault();
-        router.post('/ponto', values)
 
-        
+        post('/ponto', {
+            data,
+            onSuccess: () => {
+                console.log('Categoria criada com sucesso!');
+                setData({ nome: '', endereco: '', categoria: '' });
+            },
+            onError: (errors) => {
+                console.error('Erro ao criar categoria:', errors);
+            },
+        });
     };
+
+
+    
+    
+
+    
     
 
     return (
@@ -72,53 +83,55 @@ export default function Welcome({ auth, laravelVersion, phpVersion ,categorias})
                 <LocationMarker onMapClick={handleOpenModal} />
             </MapContainer>
 
-            
+            {/* Renderiza o modal */}
             <Modal show={modalOpen} onClose={handleCloseModal} maxWidth="md"  style={{ zIndex: 999 }}>
                 <div className="p-4">
                     <h2>Adicionar Ponto de Interesse</h2>
-                    <form onSubmit={handleSubmit}>
-                      <div className="mb-4">
-                        <label htmlFor="nome" className="block mb-2">Nome do Ponto de Interesse:</label>
-                        <input
-                          type="text"
-                          id="nome"
-                          name="nome"
-                          value={formData.nome}
-                          onChange={handleChange}
-                          className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                          required
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label htmlFor="categoria_id" className="block mb-2">Categoria:</label>
-                        <select
-                          id="categoria_id"
-                          name="categoria_id"
-                          value={formData.categoria_id}
-                          onChange={handleChange}
-                          className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                          required
-                        >
-                          <option value="">Selecione uma categoria</option>
-                          {categorias.map((categoria) => (
+                    <form onSubmit={handleSubmit} className="w-full max-w-md">
+                <div className="mb-4">
+                    <label htmlFor="nome" className="block mb-2">Nome:</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        value={data.nome}
+                        onChange={handleChange}
+                        className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="endereco" className="block mb-2">Endereço:</label>
+                    <input
+                        type="text"
+                        id="endereco"
+                        name="endereco"
+                        value={data.endereco}
+                        onChange={handleChange}
+                        className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                        required
+                    />
+                </div>
+                <div className="mb-4">
+                    <label htmlFor="categoria" className="block mb-2">Categoria:</label>
+                    <select
+                        id="categoria_id"
+                        name="categoria_id"
+                        value={data.categoria_id}
+                        onChange={handleChange}
+                        className="border border-gray-300 rounded-md px-3 py-2 w-full"
+                        required
+                    >
+                        <option value="">Selecione uma categoria</option>
+                        {categorias.map(categoria => (
                             <option key={categoria.id} value={categoria.id}>{categoria.nome}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="mb-4">
-                        <label htmlFor="endereco" className="block mb-2">Endereço:</label>
-                        <input
-                          type="text"
-                          id="endereco"
-                          name="endereco"
-                          value={formData.endereco}
-                          onChange={handleChange}
-                          className="border border-gray-300 rounded-md px-3 py-2 w-full"
-                          required
-                        />
-                      </div>
-                      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Adicionar</button>
-                    </form>
+                        ))}
+                    </select>
+                </div>
+                
+                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Adicionar Categoria</button>
+            </form>
+                   
                 </div>
             </Modal>
         </div>
