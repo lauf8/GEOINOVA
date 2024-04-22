@@ -13,7 +13,7 @@ Route::get('/categoria', function () {
     return Inertia::render('CategoriaCreate', [
     ]);
 });
-Route::post('/', [CategoriaController::class, 'store']);
+Route::post('/categoria', [CategoriaController::class, 'store']);
 
 
 Route::get('/', [PontoController::class, 'index']);

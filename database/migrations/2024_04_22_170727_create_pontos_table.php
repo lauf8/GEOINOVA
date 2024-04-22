@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('pontos', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('lng');
+            $table->string('lat');
             $table->string('endereco');
             $table->string('nome');
             $table->foreignId('categoria_id')->constrained('categorias');
+            $table->timestamps();
         });
     }
 

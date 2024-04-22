@@ -9,7 +9,7 @@ class Ponto extends Model
 {
     use HasFactory;
     protected $table = 'pontos';
-    protected $fillable = ['endereco', 'nome', 'categoria_id'];
+    protected $fillable = ['endereco', 'nome', 'categoria_id', 'lat', 'lng'];
 
     public function categoria()
     {
