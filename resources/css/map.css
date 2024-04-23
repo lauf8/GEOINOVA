@@ -2,3 +2,25 @@
   height: 80vh;
   width: 80vw;
 }
+
+.legenda {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.legenda div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px; /* Espaço entre cada categoria */
+}
+
+.legenda img {
+  width: 20px;
+  height: auto;
+  margin-right: 5px;
+}
